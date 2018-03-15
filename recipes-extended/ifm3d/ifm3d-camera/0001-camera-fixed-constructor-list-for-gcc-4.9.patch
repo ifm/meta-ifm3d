@@ -1,0 +1,46 @@
+From ff0c8dbafa6ac59b0235580c0c40981dffd1585e Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Tue, 13 Mar 2018 15:02:23 +0100
+Subject: [PATCH] camera: fixed constructor list for gcc 4.9
+
+---
+ src/libifm3d_camera/camera.cpp | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/src/libifm3d_camera/camera.cpp b/src/libifm3d_camera/camera.cpp
+index a911a73..713cbc6 100644
+--- a/src/libifm3d_camera/camera.cpp
++++ b/src/libifm3d_camera/camera.cpp
+@@ -83,12 +83,9 @@ RO_LUT =
+        {"TemperatureIllu", true},
+      }
+     },
+-
+     {"Apps",
+-     {
+-     }
++     std::unordered_map<std::string, bool>()
+     },
+-
+     {"Net",
+      {
+        {"MACAddress", true},
+@@ -121,13 +118,11 @@ RO_LUT =
+     },
+ 
+     {"SpatialFilter",
+-     {
+-     }
++     std::unordered_map<std::string, bool>()
+     },
+ 
+     {"TemporalFilter",
+-     {
+-     }
++     std::unordered_map<std::string, bool>()
+     }
+   };
+ 
+-- 
+2.7.4
+

@@ -1,0 +1,22 @@
+From af2de2053b0dd3184aeb6ea5ff4e35c439bd3292 Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Tue, 13 Mar 2018 15:24:35 +0100
+Subject: [PATCH] cmake: added c as used language neccessary for yocto
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8817028..e1829ec 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-project(IFM3D_FG CXX)
++project(IFM3D_FG CXX C)
+ set(IFM3D_FG_MODULE_NAME "libifm3d-framegrabber")
+ 
+ file(COPY ${IFM3D_FG_SOURCE_DIR}/include
+-- 
+2.7.4
+

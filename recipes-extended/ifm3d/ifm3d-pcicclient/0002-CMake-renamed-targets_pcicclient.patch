@@ -1,0 +1,69 @@
+From e6032210ebc77f4d221309fde56ab50a6462ae69 Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 17:05:06 +0100
+Subject: [PATCH] CMake: renamed targets
+
+Modules should compile as standalone libraries for yocto
+---
+ src/libifm3d_pcicclient/CMakeLists.txt | 14 +++++++-------
+ test/CMakeLists.txt                    |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/libifm3d_pcicclient/CMakeLists.txt b/src/libifm3d_pcicclient/CMakeLists.txt
+index 836e8d0..973ce5b 100644
+--- a/src/libifm3d_pcicclient/CMakeLists.txt
++++ b/src/libifm3d_pcicclient/CMakeLists.txt
+@@ -9,30 +9,30 @@ endif (NOT TARGET glog::glog)
+ 
+ file(GLOB IFM3D_PCICCLIENT_SOURCES *.cpp)
+ 
+-add_library(ifm3d_pcicclient_shared SHARED ${IFM3D_PCICCLIENT_SOURCES})
+-set_property(TARGET ifm3d_pcicclient_shared PROPERTY POSITION_INDEPENDENT_CODE 1)
++add_library(ifm3d_pcicclient SHARED ${IFM3D_PCICCLIENT_SOURCES})
++set_property(TARGET ifm3d_pcicclient PROPERTY POSITION_INDEPENDENT_CODE 1)
+ 
+ target_link_libraries(
+-  ifm3d_pcicclient_shared
+-  ifm3d_camera_shared
++  ifm3d_pcicclient
++  ifm3d_camera
+   ${LIB_glog}
+   ${CMAKE_THREAD_LIBS_INIT}
+   ${Boost_LIBRARIES}
+ )
+ 
+ 
+-set_target_properties(ifm3d_pcicclient_shared PROPERTIES
++set_target_properties(ifm3d_pcicclient PROPERTIES
+ VERSION ${IFM3D_VERSION_STRING}
+ OUTPUT_NAME ifm3d_pcicclient
+ LINKER_LANGUAGE CXX
+ )
+ 
+ if(WIN32)
+-    target_compile_definitions(ifm3d_pcicclient_shared PRIVATE
++    target_compile_definitions(ifm3d_pcicclient PRIVATE
+         IFM3D_PCICCLIENT_DLL_BUILD=1)
+ endif(WIN32)
+ 
+-install(TARGETS ifm3d_pcicclient_shared
++install(TARGETS ifm3d_pcicclient
+   RUNTIME DESTINATION ${_bin} COMPONENT pcicclient
+   LIBRARY DESTINATION ${_lib} COMPONENT pcicclient
+   ARCHIVE DESTINATION ${_lib} COMPONENT pcicclient
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 4f1fea1..dc40bec 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -22,7 +22,7 @@ file(GLOB TEST_SOURCES *.cpp)
+ add_executable(ifm3d-pcicclient-tests ${TEST_SOURCES})
+ target_link_libraries(ifm3d-pcicclient-tests
+                       gtest_main
+-                      ifm3d_pcicclient_shared
++                      ifm3d_pcicclient
+                       )
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+-- 
+2.7.4
+

@@ -1,0 +1,115 @@
+From 5cf0d02a81ab9c87f1618448a38fd03c9f0005ba Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 16:53:47 +0100
+Subject: [PATCH] CMake: renamed targets
+
+Modules should compile as standalone libraries for yocto
+---
+ src/bin/CMakeLists.txt            |  2 +-
+ src/libifm3d_tools/CMakeLists.txt | 34 +++++++++++++++++-----------------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/src/bin/CMakeLists.txt b/src/bin/CMakeLists.txt
+index 8927fea..9269391 100644
+--- a/src/bin/CMakeLists.txt
++++ b/src/bin/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ add_executable(ifm3d ifm3d.cpp)
+ target_link_libraries(ifm3d
+-  ifm3d_tools_shared
++  ifm3d_tools
+   )
+ install(TARGETS ifm3d
+   DESTINATION ${_bin} COMPONENT tools
+diff --git a/src/libifm3d_tools/CMakeLists.txt b/src/libifm3d_tools/CMakeLists.txt
+index 3d91fc6..52221e4 100644
+--- a/src/libifm3d_tools/CMakeLists.txt
++++ b/src/libifm3d_tools/CMakeLists.txt
+@@ -19,15 +19,15 @@ if (BUILD_MODULE_IMAGE)
+   set(IFM3D_TOOLS_SOURCES ${IFM3D_TOOLS_SOURCES} ${IFM3D_TOOLS_IMAGE_SOURCES})
+ endif()
+ 
+-add_library(ifm3d_tools_shared SHARED ${IFM3D_TOOLS_SOURCES})
+-set_property(TARGET ifm3d_tools_shared PROPERTY POSITION_INDEPENDENT_CODE 1)
++add_library(ifm3d_tools SHARED ${IFM3D_TOOLS_SOURCES})
++set_property(TARGET ifm3d_tools PROPERTY POSITION_INDEPENDENT_CODE 1)
+ 
+ if(BUILD_MODULE_IMAGE)
+     target_link_libraries(
+-      ifm3d_tools_shared
+-      ifm3d_camera_shared
+-      ifm3d_framegrabber_shared
+-      ifm3d_image_shared
++      ifm3d_tools
++      ifm3d_camera
++      ifm3d_framegrabber
++      ifm3d_image
+       ${PCL_VISUALIZATION_LIBRARIES}
+       ${OpenCV_LIBRARY_DIRS}
+       ${LIB_glog}
+@@ -36,17 +36,17 @@ if(BUILD_MODULE_IMAGE)
+     )
+ elseif(BUILD_MODULE_FRAMEGRABBER)
+   target_link_libraries(
+-    ifm3d_tools_shared
+-    ifm3d_camera_shared
+-    ifm3d_framegrabber_shared
++    ifm3d_tools
++    ifm3d_camera
++    ifm3d_framegrabber
+     ${LIB_glog}
+     ${Boost_LIBRARIES}
+     ${CURL_LIBRARIES}
+     )
+ else()
+   target_link_libraries(
+-    ifm3d_tools_shared
+-    ifm3d_camera_shared
++    ifm3d_tools
++    ifm3d_camera
+     ${LIB_glog}
+     ${Boost_LIBRARIES}
+     ${CURL_LIBRARIES}
+@@ -54,21 +54,21 @@ else()
+ endif()
+ 
+ if (BUILD_MODULE_IMAGE)
+-  set_target_properties(ifm3d_tools_shared PROPERTIES
++  set_target_properties(ifm3d_tools PROPERTIES
+     VERSION ${IFM3D_VERSION_STRING}
+     OUTPUT_NAME ifm3d_tools
+     LINKER_LANGUAGE CXX
+     )
+-  set_target_properties(ifm3d_tools_shared PROPERTIES
++  set_target_properties(ifm3d_tools PROPERTIES
+     AUTOMOC TRUE
+     )
+   if(NOT WIN32)
+-    set_target_properties(ifm3d_tools_shared PROPERTIES
++    set_target_properties(ifm3d_tools PROPERTIES
+       COMPILE_FLAGS "-Wno-deprecated -Wno-deprecated-declarations"
+       )
+   endif()
+ else()
+-  set_target_properties(ifm3d_tools_shared PROPERTIES
++  set_target_properties(ifm3d_tools PROPERTIES
+     VERSION ${IFM3D_VERSION_STRING}
+     OUTPUT_NAME ifm3d_tools
+     LINKER_LANGUAGE CXX
+@@ -76,11 +76,11 @@ else()
+ endif()
+ 
+ if(WIN32)
+-    target_compile_definitions(ifm3d_tools_shared PRIVATE
++    target_compile_definitions(ifm3d_tools PRIVATE
+         IFM3D_TOOLS_DLL_BUILD=1)
+ endif(WIN32)
+ 
+-install(TARGETS ifm3d_tools_shared
++install(TARGETS ifm3d_tools
+   RUNTIME DESTINATION ${_bin} COMPONENT tools
+   LIBRARY DESTINATION ${_lib} COMPONENT tools
+   ARCHIVE DESTINATION ${_lib} COMPONENT tools
+-- 
+2.7.4
+

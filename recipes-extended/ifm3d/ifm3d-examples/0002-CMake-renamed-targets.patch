@@ -1,0 +1,134 @@
+From 20335cbe8c2b4458419f5e26593bf110be8029af Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 16:54:45 +0100
+Subject: [PATCH 2/2] CMake: renamed targets
+
+Modules should compile as standalone libraries for yocto
+---
+ CMakeLists.txt   | 50 ++++++++++++++++++++++++++++++--------------------
+ ex-timestamp.cpp |  2 +-
+ 2 files changed, 31 insertions(+), 21 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9e2a6ce..d688c25 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,7 +2,7 @@ project(IFM3D_EXAMPLES)
+ cmake_minimum_required(VERSION 2.8.12)
+ 
+ set(CMAKE_MODULE_PATH
+-    ${ifm3d_EXAMPLES_SOURCE_DIR}/../../cmake/modules
++    ${IFM3D_EXAMPLES_SOURCE_DIR}/../../cmake/modules
+     ${CMAKE_MODULE_PATH}
+     )
+ 
+@@ -18,7 +18,7 @@ include(ifm3d_version)
+ find_package(PCL 1.7.1 REQUIRED COMPONENTS common io)
+ find_package(OpenCV REQUIRED)
+ find_package(Boost REQUIRED COMPONENTS system)
+-
++find_package(Threads REQUIRED)
+ find_library(LIB_boost_system NAMES boost_system)
+ 
+ 
+@@ -59,56 +59,66 @@ add_definitions(
+ 
+ add_executable(ex-file_io ex-file_io.cpp)
+ target_link_libraries(ex-file_io
+-                      ifm3d_image_shared
+-                      ifm3d_framegrabber_shared
+-                      ifm3d_camera_shared
++                      ifm3d_image
++                      ifm3d_framegrabber
++                      ifm3d_camera
+                       ${PCL_IO_LIBRARIES}
+                       ${OpenCV_LIBRARIES}
+                       )
+ 
+ add_executable(ex-getmac  ex-getmac.cpp)
+ target_link_libraries(ex-getmac
+-                      ifm3d_camera_shared
++                      ifm3d_camera
+                       )
+ 
+ add_executable(ex-fast_app_switch ex-fast_app_switch.cpp)
+ target_link_libraries(ex-fast_app_switch
+-                      ifm3d_image_shared
+-                      ifm3d_framegrabber_shared
+-                      ifm3d_camera_shared
+-                      ifm3d_pcicclient_shared
++                      ifm3d_image
++                      ifm3d_framegrabber
++                      ifm3d_camera
++                      ifm3d_pcicclient
+                       ${OpenCV_LIBRARIES}
++                      ${CMAKE_THREAD_LIBS_INIT}
+                       ${Boost_LIBRARIES}
+                       )
+ 
+ add_executable(ex-pcicclient_set_io ex-pcicclient_set_io.cpp)
+ target_link_libraries(ex-pcicclient_set_io
+-                      ifm3d_camera_shared
+-                      ifm3d_pcicclient_shared
++                      ifm3d_camera
++                      ifm3d_pcicclient
++                      ${CMAKE_THREAD_LIBS_INIT}
+                       ${Boost_LIBRARIES}
+                       )
+ 
+ add_executable(ex-pcicclient_async_messages ex-pcicclient_async_messages.cpp)
+ target_link_libraries(ex-pcicclient_async_messages
+-                      ifm3d_camera_shared
+-                      ifm3d_pcicclient_shared
++                      ifm3d_camera
++                      ifm3d_pcicclient
++                      ${CMAKE_THREAD_LIBS_INIT}
+                       ${Boost_LIBRARIES}
+                       )
+ 
+ add_executable(ex-timestamp  ex-timestamp.cpp)
+ target_link_libraries(ex-timestamp
+-                      ifm3d_image_shared
+-                      ifm3d_framegrabber_shared
+-                      ifm3d_camera_shared
++                      ifm3d_image
++                      ifm3d_framegrabber
++                      ifm3d_camera
+                       ${PCL_IO_LIBRARIES}
+                       ${OpenCV_LIBRARIES}
+                       )
+ 
+ add_executable(ex-exposure_times ex-exposure_times.cpp)
+ target_link_libraries(ex-exposure_times
+-                      ifm3d_camera_shared
+-                      ifm3d_framegrabber_shared
+-                      ifm3d_image_shared
++                      ifm3d_camera
++                      ifm3d_framegrabber
++                      ifm3d_image
+                       ${PCL_IO_LIBRARIES}
+                       ${OpenCV_LIBRARIES}
+                       )
++
++install(TARGETS ex-file_io ex-getmac ex-fast_app_switch ex-pcicclient_set_io ex-pcicclient_async_messages ex-timestamp ex-exposure_times
++  RUNTIME DESTINATION ${_bin} COMPONENT examples
++  LIBRARY DESTINATION ${_lib} COMPONENT examples
++  ARCHIVE DESTINATION ${_lib} COMPONENT examples
++  PUBLIC_HEADER DESTINATION ${_include} COMPONENT examples
++  )
+diff --git a/ex-timestamp.cpp b/ex-timestamp.cpp
+index ce0e087..ef6d31b 100644
+--- a/ex-timestamp.cpp
++++ b/ex-timestamp.cpp
+@@ -37,7 +37,7 @@ std::string formatTimestamp(ifm3d::TimePointT timestamp) {
+           timestamp.time_since_epoch() - duration_cast<seconds>(timestamp.time_since_epoch()));
+ 
+     std::ostringstream s;
+-    std::tm *lt=std::localtime(&time)
++    std::tm *lt=std::localtime(&time);
+     // put_time not supported in gcc 4.9
+     //s << std::put_time(std::localtime(&time), "%Y-%m-%d %H:%M:%S")
+     s << lt->tm_year << lt->tm_mon << lt->tm_mday << " "
+-- 
+2.7.4
+

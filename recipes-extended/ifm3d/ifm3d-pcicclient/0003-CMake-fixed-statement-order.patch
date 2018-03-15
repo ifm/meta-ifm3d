@@ -1,0 +1,27 @@
+From 5c866c61ae63354dd3e4ecd010c01d3849fc33a8 Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 17:54:13 +0100
+Subject: [PATCH] CMake: fixed statement order
+
+---
+ CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03da62d..542cfd9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,8 @@
+-find_package(Boost REQUIRED COMPONENTS system regex date_time)
+-
+ project(IFM3D_PCICCLIENT CXX C)
+ set(IFM3D_PCICCLIENT_MODULE_NAME "libifm3d-pcicclient")
+ 
++find_package(Boost REQUIRED COMPONENTS system regex date_time)
++
+ file(COPY ${IFM3D_PCICCLIENT_SOURCE_DIR}/include
+   DESTINATION ${IFM3D_PCICCLIENT_BINARY_DIR}
+   )
+-- 
+2.7.4
+

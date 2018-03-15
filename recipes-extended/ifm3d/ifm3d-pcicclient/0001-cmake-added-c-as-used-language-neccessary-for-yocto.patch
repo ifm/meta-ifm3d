@@ -1,0 +1,24 @@
+From 10ba4005f20b827449183696af5c677d2c89a0c0 Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 17:13:18 +0100
+Subject: [PATCH] cmake: added c as used language neccessary for yocto
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ed6a3ad..03da62d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ find_package(Boost REQUIRED COMPONENTS system regex date_time)
+ 
+-project(IFM3D_PCICCLIENT CXX)
++project(IFM3D_PCICCLIENT CXX C)
+ set(IFM3D_PCICCLIENT_MODULE_NAME "libifm3d-pcicclient")
+ 
+ file(COPY ${IFM3D_PCICCLIENT_SOURCE_DIR}/include
+-- 
+2.7.4
+

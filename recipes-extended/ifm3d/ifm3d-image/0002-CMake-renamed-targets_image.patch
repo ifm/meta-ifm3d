@@ -1,0 +1,73 @@
+From 71ea2b8447aa87a5ad348ad953c4f544ca53c44d Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 16:42:14 +0100
+Subject: [PATCH] CMake: renamed targets
+
+Modules should compile as standalone libraries for yocto
+---
+ src/libifm3d_image/CMakeLists.txt | 16 ++++++++--------
+ test/CMakeLists.txt               |  6 +++---
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/src/libifm3d_image/CMakeLists.txt b/src/libifm3d_image/CMakeLists.txt
+index 3186f9f..a461bb6 100644
+--- a/src/libifm3d_image/CMakeLists.txt
++++ b/src/libifm3d_image/CMakeLists.txt
+@@ -11,29 +11,29 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ file(GLOB IFM3D_IMAGE_SOURCES *.cpp)
+ 
+ add_library(
+-  ifm3d_image_shared SHARED ${IFM3D_IMAGE_SOURCES})
+-set_property(TARGET ifm3d_image_shared PROPERTY POSITION_INDEPENDENT_CODE 1)
++  ifm3d_image SHARED ${IFM3D_IMAGE_SOURCES})
++set_property(TARGET ifm3d_image PROPERTY POSITION_INDEPENDENT_CODE 1)
+ 
+ target_link_libraries(
+-  ifm3d_image_shared
+-  ifm3d_framegrabber_shared
+-  ifm3d_camera_shared
++  ifm3d_image
++  ifm3d_framegrabber
++  ifm3d_camera
+   ${OpenCV_LIBRARIES}
+   ${LIB_glog}
+   )
+ 
+-set_target_properties(ifm3d_image_shared PROPERTIES
++set_target_properties(ifm3d_image PROPERTIES
+   VERSION ${IFM3D_VERSION_STRING}
+   OUTPUT_NAME ifm3d_image
+   LINKER_LANGUAGE CXX
+   )
+ 
+ if(WIN32)
+-    target_compile_definitions(ifm3d_image_shared PRIVATE
++    target_compile_definitions(ifm3d_image PRIVATE
+         IFM3D_IMAGE_DLL_BUILD=1)
+ endif(WIN32)
+ 
+-install(TARGETS ifm3d_image_shared
++install(TARGETS ifm3d_image
+   RUNTIME DESTINATION ${_bin} COMPONENT image
+   LIBRARY DESTINATION ${_lib} COMPONENT image
+   ARCHIVE DESTINATION ${_lib} COMPONENT image
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 9949e71..1885fa1 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -22,9 +22,9 @@ file(GLOB TEST_SOURCES *.cpp)
+ add_executable(ifm3d-image-tests ${TEST_SOURCES})
+ target_link_libraries(ifm3d-image-tests
+                       gtest_main
+-                      ifm3d_image_shared
+-                      ifm3d_framegrabber_shared
+-                      ifm3d_camera_shared
++                      ifm3d_image
++                      ifm3d_framegrabber
++                      ifm3d_camera
+                       )
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+-- 
+2.7.4
+

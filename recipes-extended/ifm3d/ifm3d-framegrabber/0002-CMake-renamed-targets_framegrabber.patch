@@ -1,0 +1,69 @@
+From 77dd2a4ec04389532bf130b134b2d492755e4ba8 Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Wed, 14 Mar 2018 16:28:46 +0100
+Subject: [PATCH] CMake: renamed targets
+
+Modules should compile as standalone libraries for yocto
+---
+ src/libifm3d_framegrabber/CMakeLists.txt | 14 +++++++-------
+ test/CMakeLists.txt                      |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/src/libifm3d_framegrabber/CMakeLists.txt b/src/libifm3d_framegrabber/CMakeLists.txt
+index b688ca0..877c32b 100644
+--- a/src/libifm3d_framegrabber/CMakeLists.txt
++++ b/src/libifm3d_framegrabber/CMakeLists.txt
+@@ -12,30 +12,30 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ file(GLOB IFM3D_FG_SOURCES *.cpp)
+ 
+ add_library(
+-  ifm3d_framegrabber_shared SHARED ${IFM3D_FG_SOURCES}
++  ifm3d_framegrabber SHARED ${IFM3D_FG_SOURCES}
+   )
+-set_property(TARGET ifm3d_framegrabber_shared PROPERTY POSITION_INDEPENDENT_CODE 1)
++set_property(TARGET ifm3d_framegrabber PROPERTY POSITION_INDEPENDENT_CODE 1)
+ 
+ target_link_libraries(
+-  ifm3d_framegrabber_shared
+-  ifm3d_camera_shared
++  ifm3d_framegrabber
++  ifm3d_camera
+   ${LIB_glog}
+   ${Boost_LIBRARIES}
+   ${CMAKE_THREAD_LIBS_INIT}
+   )
+ 
+-set_target_properties(ifm3d_framegrabber_shared PROPERTIES
++set_target_properties(ifm3d_framegrabber PROPERTIES
+   VERSION ${IFM3D_VERSION_STRING}
+   OUTPUT_NAME ifm3d_framegrabber
+   LINKER_LANGUAGE CXX
+   )
+ 
+ if(WIN32)
+-    target_compile_definitions(ifm3d_framegrabber_shared PRIVATE
++    target_compile_definitions(ifm3d_framegrabber PRIVATE
+         IFM3D_FRAME_GRABBER_DLL_BUILD=1)
+ endif(WIN32)
+ 
+-install(TARGETS ifm3d_framegrabber_shared
++install(TARGETS ifm3d_framegrabber
+   RUNTIME DESTINATION ${_bin} COMPONENT framegrabber
+   LIBRARY DESTINATION ${_lib} COMPONENT framegrabber
+   ARCHIVE DESTINATION ${_lib} COMPONENT framegrabber
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index cbb3338..e3ab41f 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -22,7 +22,7 @@ file(GLOB TEST_SOURCES *.cpp)
+ add_executable(ifm3d-fg-tests ${TEST_SOURCES})
+ target_link_libraries(ifm3d-fg-tests
+                       gtest_main
+-                      ifm3d_framegrabber_shared
++                      ifm3d_framegrabber
+                       )
+ 
+ if(NOT CMAKE_CROSSCOMPILING)
+-- 
+2.7.4
+
