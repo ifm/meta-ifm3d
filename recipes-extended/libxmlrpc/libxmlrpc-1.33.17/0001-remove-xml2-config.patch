@@ -1,0 +1,349 @@
+Index: xmlrpc-c-1.33.17/common.mk
+===================================================================
+--- xmlrpc-c-1.33.17.orig/common.mk
++++ xmlrpc-c-1.33.17/common.mk
+@@ -160,10 +160,10 @@ LDFLAGS_SHLIB_ALL=$(LDFLAGS_ALL) $(LDFLA
+ 
+ #------ the actual rules ----------------------------------------------------
+ $(TARGET_SHARED_LIBRARIES) dummyshlib:
+-	$(CCLD) $(LDFLAGS_SHLIB_ALL) $(LIBOBJECTS) $(LIBDEP) -o $@  
++	$(CCLD) $(LDFLAGS_SHLIB_ALL) $(LIBOBJECTS) $(LIBDEP) -o $@
+ 
+ $(TARGET_SHARED_LIBS_PP) dummyshlibpp:
+-	$(CXXLD) $(LDFLAGS_SHLIB_ALL) $(LIBOBJECTS) $(LIBDEP) -o $@  
++	$(CXXLD) $(LDFLAGS_SHLIB_ALL) $(LIBOBJECTS) $(LIBDEP) -o $@
+ #----------------------------------------------------------------------------
+ 
+ LIBXMLRPC_UTIL_DIR = $(BLDDIR)/lib/libutil
+@@ -252,7 +252,7 @@ ifneq ($(ENABLE_LIBXML2_BACKEND),yes)
+         -L$(BLDDIR)/lib/expat/xmlparse -lxmlrpc_xmlparse \
+         -L$(BLDDIR)/lib/expat/xmltok   -lxmlrpc_xmltok
+ else
+-  LDLIBS_XML = $(shell xml2-config --libs)
++  LDLIBS_XML = $(shell pkg-config libxml-2.0 --libs)
+ endif
+ 
+ # LIBXMLRPC_UTIL_LIBDEP is the string of linker options you need on the link
+@@ -347,37 +347,37 @@ blddir:
+ .PHONY: $(SUBDIRS:%=%/all)
+ $(SUBDIRS:%=%/all): %/all: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/install)
+ $(SUBDIRS:%=%/install): %/install: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/clean)
+ $(SUBDIRS:%=%/clean): %/clean: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/distclean)
+ $(SUBDIRS:%=%/distclean): %/distclean: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/check)
+ $(SUBDIRS:%=%/check): %/check: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/distdir)
+ $(SUBDIRS:%=%/distdir): %/distdir: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ .PHONY: $(SUBDIRS:%=%/dep)
+ $(SUBDIRS:%=%/dep): %/dep: $(CURDIR)/%
+ 	$(MAKE) -C $(dir $@) -f $(SRCDIR)/$(SUBDIR)/$(dir $@)Makefile \
+-	    $(notdir $@) 
++	    $(notdir $@)
+ 
+ 
+ ##############################################################################
+@@ -564,7 +564,7 @@ install-static-libraries: $(STATIC_LIBRA
+ 	done
+ 
+ HEADERDESTDIR = $(DESTDIR)$(HEADERINST_DIR)
+-INSTALL_HDR_CMD = $(INSTALL_DATA) $$d$$p $(HEADERDESTDIR)/$$p 
++INSTALL_HDR_CMD = $(INSTALL_DATA) $$d$$p $(HEADERDESTDIR)/$$p
+ 
+ install-headers: $(HEADERS_TO_INSTALL)
+ 	$(MKINSTALLDIRS) $(HEADERDESTDIR)
+@@ -623,7 +623,7 @@ distclean-common:
+ #
+ # Because of this, a user doesn't need depend.mk, because he
+ # doesn't modify source files.  A developer, on the other hand, must make his
+-# own depend.mk, because 'make dep' creates depend.mk with 
++# own depend.mk, because 'make dep' creates depend.mk with
+ # absolute pathnames, specific to the developer's system.
+ #
+ # So we obliterate depend.mk here.  The build will automatically
+Index: xmlrpc-c-1.33.17/configure
+===================================================================
+--- xmlrpc-c-1.33.17.orig/configure
++++ xmlrpc-c-1.33.17/configure
+@@ -5769,36 +5769,7 @@ $as_echo_n "checking whether to build th
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $enable_libxml2_backend" >&5
+ $as_echo "$enable_libxml2_backend" >&6; }
+ 
+-if test $enable_libxml2_backend = yes; then
+-  # Extract the first word of "xml2-config", so it can be a program name with args.
+-set dummy xml2-config; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if test "${ac_cv_prog_have_xml2_config+set}" = set; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$have_xml2_config"; then
+-  ac_cv_prog_have_xml2_config="$have_xml2_config" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+-    ac_cv_prog_have_xml2_config="yes"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-  test -z "$ac_cv_prog_have_xml2_config" && ac_cv_prog_have_xml2_config="no"
+-fi
+-fi
+-have_xml2_config=$ac_cv_prog_have_xml2_config
++have_xml2_config="yes"
+ if test -n "$have_xml2_config"; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_xml2_config" >&5
+ $as_echo "$have_xml2_config" >&6; }
+@@ -5811,7 +5782,6 @@ fi
+   if test $have_xml2_config = no; then
+     as_fn_error $? "You specified --enable-libxml2_backend, but don't appear to have libxml2 installed (no working xml2-config in your command search path), so we cannot not build for libxml2" "$LINENO" 5
+   fi
+-fi
+ ENABLE_LIBXML2_BACKEND=$enable_libxml2_backend
+ 
+ 
+Index: xmlrpc-c-1.33.17/configure.in
+===================================================================
+--- xmlrpc-c-1.33.17.orig/configure.in
++++ xmlrpc-c-1.33.17/configure.in
+@@ -24,7 +24,7 @@ dnl ====================================
+ FEATURE_LIST=
+ 
+ AC_ARG_ENABLE(wininet-client,
+-  [  --disable-wininet-client  Don't build the Wininet client transport], , 
++  [  --disable-wininet-client  Don't build the Wininet client transport], ,
+ enable_wininet_client=maybe)
+ 
+ if test $enable_wininet_client = maybe; then
+@@ -45,7 +45,7 @@ AC_SUBST(MUST_BUILD_WININET_CLIENT)
+ 
+ 
+ AC_ARG_ENABLE(curl-client,
+-  [  --disable-curl-client     Don't build the Curl client transport], , 
++  [  --disable-curl-client     Don't build the Curl client transport], ,
+ enable_curl_client=maybe)
+ 
+ if test $enable_curl_client = maybe; then
+@@ -66,7 +66,7 @@ AC_SUBST(MUST_BUILD_CURL_CLIENT)
+ 
+ 
+ AC_ARG_ENABLE(libwww-client,
+-  [  --disable-libwww-client   Don't build the Libwww client transport], , 
++  [  --disable-libwww-client   Don't build the Libwww client transport], ,
+ enable_libwww_client=maybe)
+ 
+ if test $enable_libwww_client = maybe; then
+@@ -326,7 +326,7 @@ va_list_is_array=no
+ AC_MSG_CHECKING(whether va_list is an array)
+ AC_TRY_COMPILE([
+ #include <stdarg.h>
+-], [va_list list1, list2; list1 = list2;], , 
++], [va_list list1, list2; list1 = list2;], ,
+ va_list_is_array=yes)
+ AC_MSG_RESULT($va_list_is_array)
+ if test x"$va_list_is_array" = xyes; then
+@@ -462,7 +462,7 @@ $(echo $W3VER|sed 's/\([[0-9]]*\)\.\([[0
+     dnl Get the necessary CFLAGS, and merge them into our master list.
+     WININET_CFLAGS=$($WININET_CONFIG --cflags)
+     AC_SUBST(WININET_CFLAGS)
+-    CFLAGS="$CFLAGS $WININET_CFLAGS" 
++    CFLAGS="$CFLAGS $WININET_CFLAGS"
+ 
+     dnl Get the huge list of libraries we need to link against.
+     WININET_LDADD=$($WININET_CONFIG --libs)
+@@ -542,9 +542,9 @@ if test $MUST_BUILD_CURL_CLIENT = yes; t
+     if test "x$CURL_CONFIG" = "xno"; then
+         AC_MSG_ERROR(Configure INTERNAL ERROR - first curl-config found, then not found)
+     fi
+-    
++
+     dnl There used to be code here to check the Curl version and make sure
+-    dnl it is at least 7.8.  But there were bugs both in the code and in 
++    dnl it is at least 7.8.  But there were bugs both in the code and in
+     dnl curl (curl-config --vernum, at least in older versions of Curl,
+     dnl omits the leading zero).  So it didn't work.  Plus, checking version
+     dnl numbers isn't a good idea.  Better to check for feature presence.
+@@ -569,7 +569,7 @@ dnl ====================================
+ 
+ AC_ARG_WITH(libwww-ssl,
+   [  --with-libwww-ssl       Include libwww SSL capability.]
+-   ) 
++   )
+ 
+ if test x"$enable_libwww_client" != xno; then
+     AC_MSG_CHECKING(whether to use SSL with libwww)
+@@ -592,12 +592,6 @@ enable_libxml2_backend=no)
+ AC_MSG_CHECKING(whether to build the libxml2 backend)
+ AC_MSG_RESULT($enable_libxml2_backend)
+ 
+-if test $enable_libxml2_backend = yes; then
+-  AC_CHECK_PROG(have_xml2_config, xml2-config, yes, no)
+-  if test $have_xml2_config = no; then
+-    AC_MSG_ERROR([You specified --enable-libxml2_backend, but don't appear to have libxml2 installed (no working xml2-config in your command search path), so we cannot not build for libxml2])
+-  fi
+-fi
+ ENABLE_LIBXML2_BACKEND=$enable_libxml2_backend
+ AC_SUBST(ENABLE_LIBXML2_BACKEND)
+ 
+Index: xmlrpc-c-1.33.17/src/Makefile
+===================================================================
+--- xmlrpc-c-1.33.17.orig/src/Makefile
++++ xmlrpc-c-1.33.17/src/Makefile
+@@ -68,7 +68,7 @@ endif
+ 
+ ifeq ($(ENABLE_LIBXML2_BACKEND),yes)
+   XMLRPC_XML_PARSER = xmlrpc_libxml2
+-  XML_PARSER_LIBDEP = $(shell xml2-config --libs)
++  XML_PARSER_LIBDEP = $(shell pkg-config libxml-2.0 --libs)
+   XML_PARSER_LIBDEP_DEP =
+ else
+   XMLRPC_XML_PARSER = xmlrpc_expat
+@@ -220,7 +220,7 @@ $(LIBXMLRPC_CLIENT): LIBOBJECTS = \
+ # general directories (such as /usr/local/lib) that are added to the
+ # search path by curl-config, etc.  That's why we separate the -L from
+ # the corresponding -l.
+-# 
++#
+ # Note that in a properly configured system, curl-config, etc. do not
+ # generate -L options for general directories.
+ 
+@@ -266,7 +266,7 @@ BASIC_INCLUDES = \
+   -Isrcdir/lib/util/include \
+ 
+ ifeq ($(ENABLE_LIBXML2_BACKEND),yes)
+-  LIBXML_INCLUDES = $(shell xml2-config --cflags)
++  LIBXML_INCLUDES = $(shell pkg-config libxml-2.0 --cflags)
+ else
+   LIBXML_INCLUDES = -Isrcdir/lib/expat/xmlparse
+ endif
+@@ -300,7 +300,7 @@ $(LIBXMLRPC_SERVER_CGI_MODS:%=%.osh): \
+ #  must specify a dependency upon libxmlrpc_client and any library upon which
+ #  libxmlrpc_client depends, so the link command for libxmlrpc_client++
+ #  $(shell cat libxmlrpc_client.ldflags).
+-#  
++#
+ #  Note that some systems don't need this because there is information in
+ #  libxmlrpc_client that tells libxmlrpc_client's dependencies, so you need
+ #  only find libxmlrpc_client to generate libxmlrpc_client++.
+@@ -320,7 +320,7 @@ check:
+ .PHONY: install
+ install: install-common $(SUBDIRS:%=%/install)
+ 
+-.PHONY: clean clean-local distclean distclean-local 
++.PHONY: clean clean-local distclean distclean-local
+ clean:  $(SUBDIRS:%=%/clean) clean-common clean-local
+ clean-local:
+ 
+Index: xmlrpc-c-1.33.17/src/cpp/Makefile
+===================================================================
+--- xmlrpc-c-1.33.17.orig/src/cpp/Makefile
++++ xmlrpc-c-1.33.17/src/cpp/Makefile
+@@ -47,7 +47,7 @@ else
+ endif
+ 
+ ifeq ($(ENABLE_LIBXML2_BACKEND),yes)
+-  XML_PARSER_LIBDEP = $(shell xml2-config --libs)
++  XML_PARSER_LIBDEP = $(shell pkg-config libxml-2.0 --libs)
+ else
+   XML_PARSER_LIBDEP = \
+     -L$(BLDDIR)/lib/expat/xmlparse -lxmlrpc_xmlparse \
+Index: xmlrpc-c-1.33.17/test/cpp/Makefile
+===================================================================
+--- xmlrpc-c-1.33.17.orig/test/cpp/Makefile
++++ xmlrpc-c-1.33.17/test/cpp/Makefile
+@@ -16,7 +16,7 @@ all: $(PROGS)
+ 
+ XMLRPC_C_CONFIG = $(BLDDIR)/xmlrpc-c-config.test
+ 
+-LIBS := 
++LIBS :=
+ 
+ LIBS += -lpthread
+ 
+@@ -72,7 +72,7 @@ ifneq ($(ENABLE_LIBXML2_BACKEND),yes)
+   LIB_XML =
+   registry.o: D_INTERNAL_EXPAT=-DINTERNAL_EXPAT
+ else
+-  LIB_XML = $(shell xml2-config --libs)
++  LIB_XML = $(shell pkg-config libxml-2.0 --libs)
+ endif
+ 
+ test: $(TEST_OBJS) $(TEST_LIBS)
+Index: xmlrpc-c-1.33.17/xmlrpc-c-config.main
+===================================================================
+--- xmlrpc-c-1.33.17.orig/xmlrpc-c-config.main
++++ xmlrpc-c-1.33.17/xmlrpc-c-config.main
+@@ -26,7 +26,7 @@ if test $# -eq 0; then
+ fi
+ 
+ if test "${ENABLE_LIBXML2_BACKEND}" = "yes"; then
+-  LIBXML=`xml2-config --libs`
++  LIBXML=`pkg-config libxml-2.0 --libs`
+ else
+   LIBXML="-lxmlrpc_xmlparse -lxmlrpc_xmltok"
+ fi
+Index: xmlrpc-c-1.33.17/xmlrpc-c-config.test.main
+===================================================================
+--- xmlrpc-c-1.33.17.orig/xmlrpc-c-config.test.main
++++ xmlrpc-c-1.33.17/xmlrpc-c-config.test.main
+@@ -20,7 +20,7 @@ sopath=
+ packetsocket_lib=
+ 
+ if test "${ENABLE_LIBXML2_BACKEND}" = "yes"; then
+-  LIBXML=`xml2-config --libs`
++  LIBXML=`pkg-config libxml-2.0 --libs`
+ else
+   LIBXML="${BLDDIR}/lib/expat/xmlparse/libxmlrpc_xmlparse.a"
+   sopath="${BLDDIR}/lib/expat/xmlparse:$sopath"
+Index: xmlrpc-c-1.33.17/config.mk.in
+===================================================================
+--- xmlrpc-c-1.33.17.orig/config.mk.in
++++ xmlrpc-c-1.33.17/config.mk.in
+@@ -46,12 +46,8 @@ HAVE_WCHAR_H_DEFINE = @HAVE_WCHAR_H_DEFI
+ # Stuff 'configure' figured out about our build platform:
+ 
+ SHELL = @SHELL@
+-CC = @CC@
+-CXX = @CXX@
+ CCLD = $(CC)
+ CXXLD = $(CXX)
+-AR = @AR@
+-RANLIB = @RANLIB@
+ LN_S = ln -s
+ INSTALL = $(SRCDIR)/install-sh
+ 
