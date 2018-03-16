@@ -12,6 +12,7 @@ DEPENDS = "boost glog opencv pcl ifm3d-framegrabber"
 S = "${WORKDIR}/git/modules/image"
 
 SRC_URI += "file://0002-CMake-renamed-targets_image.patch \
+            file://0003-CMake-added-missing-cmake_minimum_required.patch \
 "
 
 do_fetch[depends] += "ifm3d-camera:do_fetch"

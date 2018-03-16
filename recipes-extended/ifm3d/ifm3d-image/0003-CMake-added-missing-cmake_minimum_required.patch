@@ -1,0 +1,23 @@
+From cd8c1a29573df5755464db6481164469ec52090e Mon Sep 17 00:00:00 2001
+From: Maximilian Seesslen <maximilian.seesslen@ifm.com>
+Date: Thu, 15 Mar 2018 18:26:58 +0100
+Subject: [PATCH] CMake: added missing cmake_minimum_required
+
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a688db2..9067d08 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,6 @@
+ project(IFM3D_IMAGE CXX)
++cmake_minimum_required(VERSION 2.8.11)
++
+ set(IFM3D_IMAGE_MODULE_NAME "libifm3d-image")
+ option(FORCE_OPENCV3 "Force the build to require OpenCV 3" OFF)
+ option(FORCE_OPENCV2 "Force the build to require OpenCV 2.4" OFF)
+-- 
+2.7.4
+
