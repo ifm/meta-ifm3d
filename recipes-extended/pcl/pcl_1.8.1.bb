@@ -33,6 +33,7 @@ EXTRA_OECMAKE += "\
   -DWITH_VTK=FALSE \
   -DWITH_PCAP=FALSE \
   -DWITH_OPENGL=FALSE \
+  -DCMAKE_NO_SYSTEM_FROM_IMPORTED=1 \
 "
 
 #Setting -ffloat-store to alleviate 32bit vs 64bit discrepancies on non-SSE platforms.
